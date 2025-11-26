@@ -1,0 +1,16 @@
+models:
+  - name: fact_stg
+    description: "Staging table for fact data"
+    columns:
+      - name: activity_id
+        tests:
+          - unique
+          - not_null
+      - name: chv_id
+        tests:
+          - not_null
+      - name: activity_date
+        tests:
+          - not_null
+
+        
