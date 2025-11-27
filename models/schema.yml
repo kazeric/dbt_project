@@ -1,16 +1,86 @@
 models:
   - name: fact_stg
-    description: "Staging table for fact data"
+    description: "Staging table for fact table data usefull to perform tests on to ensure downstream tasks have the correct data"
     columns:
       - name: activity_id
+        description: "Unique identifier for the activity"
         tests:
           - unique
           - not_null
+
       - name: chv_id
-        tests:
-          - not_null
-      - name: activity_date
+        description: "Identifier for the CHW who performed the activity"
         tests:
           - not_null
 
+      - name: activity_type
+        description: "Type of activity performed"
+        tests:
+          - not_null
+          - accepted_values: 
+              values: ['pregnancy_visit','child_assessment','family_planning','household_registration','postnatal_visit','nutrition_assessment','referral_followup','other']
+              quote: true
+
+      - name: activity_date
+        description: "Date the activity occurred"
+        tests: 
+          - not_null
+
+      - name: activity_timestamp
+        description: "Full timestamp of activity (if available)"
+        tests:
+          - not_null
+
+      - name: household_id
+        description: " Household that was visited"
+
+      - name: patient_id
+        description: "Individual patient/client served (if applicable)"
+      
+      - name: location_id
+        description: "Geographic location (village/area)"
+
+
+      - name: is_deleted
+        description: "Soft delete flag (TRUE = record is deleted)"
+        tests: 
+          - not_null
+
+      - name: created_at
+        description: "When this record was created in the warehouse"
+        tests: 
+          - not_null
+
+      - name: updated_at
+        description: "When this record was last updated"
+        tests: 
+          - not_null
+
+
         
+  - name: chw_activity_monthly
+    description: "This is the final table that can be queried for visualisation"
+    columns: 
+      - name: chv_id
+        description: "Unique identifier for the CHW"
+
+      - name: report_month
+        description: "First day of the reporting month (DATE format: YYYY-MM-01)"
+
+      - name: total_activities
+        description: "Total number of activities performed by this CHW in this month"
+
+      - name: unique_households_visited
+        description: "Number of distinct households visited (one household counted once even if visited multiple times)"
+
+      - name: unique_patients_served
+        description: "Number of distinct patients served (NULLs are ignored in DISTINCT count)"
+
+      - name: pregnancy_visits
+        description: "Count of `activity_type = 'pregnancy_visit'`"
+      
+      - name: child_assessments
+        description: "Count of `activity_type = 'child_assessment'`"
+      
+      - name: family_planning_visits
+        description: "Count of `activity_type = 'family_planning'`"

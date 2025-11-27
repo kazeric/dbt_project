@@ -17,7 +17,7 @@ WITH FACT_STAGE AS (
         patient_id ,
         location_id ,
         is_deleted     ,
-        created_at   ,
+        created_at ,
         updated_at   
 
     FROM marts.fct_chv_activity

@@ -9,3 +9,5 @@
     {%- endif -%}
 	
 {%- endmacro %}
+
+-- this is a macro to create proper schema name

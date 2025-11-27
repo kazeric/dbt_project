@@ -54,6 +54,7 @@ with source_data as (
 
 ),
 
+--  CTE to truncate the month using the macro for the 26 day rule
 report_month_cte as (
 
     select
@@ -63,6 +64,7 @@ report_month_cte as (
 
 ),
 
+-- CTE finall aggregated data  
 aggregated as (
 
     select
@@ -82,7 +84,8 @@ aggregated as (
 
 )
 
+-- handling late data with a buffer period of 1 month to make ammendments or updates to historical records 
 select * from aggregated
     {% if is_incremental() %}
-        where report_month >= dateadd(month, -3, current_date)  
+        where report_month >= dateadd(month, -1, current_date)  
     {% endif %}
